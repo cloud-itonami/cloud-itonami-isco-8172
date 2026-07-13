@@ -2,6 +2,26 @@
 
 Open Occupation Blueprint for **ISCO-08 8172**: Wood Processing Plant Operators.
 
+**Maturity: `:implemented`** — ProcessAdvisor ⊣ WoodProcessingGovernor
+as a langgraph StateGraph (`intake → advise → govern → decide →
+commit/hold`, human-approval interrupt), modeled on
+cloud-itonami-isco-4311's bookkeeping actor. 14 tests / 29 assertions
+green. The governor never dispatches hardware — it only gates what
+the plant-monitoring robot below may execute.
+
+The batch-run HARD invariants — arithmetic, not visibility or
+efficiency judgement:
+
+1. **Dust-level ceiling** — the measured dust level must not exceed
+   the registered occupational safety ceiling.
+2. **Throughput ceiling** — the proposed throughput must not exceed
+   the registered rated capacity.
+
+`:approve-blade-proximity-operation` and
+`:approve-blade-change-maintenance` **always** escalate to human
+sign-off regardless of confidence, per this repo's Trust Controls
+(business-model.md).
+
 This repository designs a forkable OSS business for an independent wood processing plant operator: a plant-monitoring robot performs safety checks and sampling near operating machinery under a governor-gated actor, so the operator keeps their own process and safety records instead of renting a closed plant-control SaaS.
 
 ## Robotics premise
