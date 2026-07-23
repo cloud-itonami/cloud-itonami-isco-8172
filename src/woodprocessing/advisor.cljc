@@ -11,7 +11,8 @@
   A proposal: {:op :approve-batch-run|:approve-blade-proximity-operation|:approve-blade-change-maintenance
                :effect :propose :plant-id str :dust-level-mgm3 number
                :throughput-m3-per-hour number :stake kw :confidence n
-               :rationale str}")
+               :rationale str}"
+  (:require #?(:clj [clojure.edn :as edn] :cljs [cljs.reader :as edn])))
 
 (defprotocol Advisor
   (-advise [advisor store request] "request -> proposal map"))
@@ -41,7 +42,7 @@
 
 (defn- parse-proposal [content]
   (try
-    (let [p (read-string content)]
+    (let [p (edn/read-string content)]
       (if (map? p)
         (assoc p :effect :propose)
         {:op :unknown :effect :propose :confidence 0.0 :stake :high
