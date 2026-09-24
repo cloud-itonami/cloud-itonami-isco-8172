@@ -1,5 +1,5 @@
 (ns woodprocessing.governor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [woodprocessing.store :as store]
             [woodprocessing.governor :as governor]))
 
