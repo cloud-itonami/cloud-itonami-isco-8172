@@ -1,0 +1,32 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a plant-monitoring robot performs blade-guard
+;; checks, dust-level sensing and sample collection near operating wood
+;; processing machinery; working near cutting blades or during blade changes
+;; needs human sign-off. Its physical work: the dust-extraction duct whose
+;; conveying velocity it checks, and placing a gauge at a blade guard.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-8172"
+ :cases
+ [{:id :dust-extraction-duct
+   :kind :pipe-flow
+   :procedure "local exhaust ventilation pulls wood dust from a saw through a 200 mm, 30 m duct; the robot checks the conveying velocity"
+   :params {:diameter-m 0.20 :length-m 30.0 :roughness-m 1.5e-4
+            :density-kg-m3 1.2 :viscosity-pa-s 1.8e-5 :pump-efficiency 0.60}
+   :sweep {:param :q-m3s :values [0.3 0.5 0.7 0.9 1.1]}
+   :quantity :velocity-mps
+   :limit {:min 20.0 :basis "estimate: ~20 m/s duct conveying velocity commonly used for dry wood dust so it does not settle"}
+   :boundary {:lo 0.1 :hi 2.0}}
+  {:id :blade-guard-gauge
+   :kind :manipulator
+   :procedure "arm reaches out low and far to hold a clearance gauge against a saw blade guard"
+   :params {:l1-m 0.50 :l2-m 0.45 :m1-kg 4.0 :m2-kg 3.0
+            :from [0.30 0.40] :to [0.85 0.20] :duration-s 2.0 :steps 400}
+   :sweep {:param :payload-kg :values [0.5 1.0 2.0 3.0 4.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 60.0 :basis "estimate: continuous shoulder torque of a light collaborative arm (~5 kg class)"}
+   :boundary {:lo 0.1 :hi 20.0}}]}
