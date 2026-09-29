@@ -1,7 +1,7 @@
 (ns woodprocessing.store
   "SSoT for the ISCO-08 8172 independent wood processing plant
   operations actor (itonami actor pattern, ADR-2607011000 /
-  CLAUDE.md Actors section; README's 'Robotics premise' — a
+  AGENTS.md Actors section; README's 'Robotics premise' — a
   plant-monitoring robot performs blade-guard checks, dust-level
   sensing and sample collection under this advisor/governor pair,
   which never dispatches hardware itself). Modeled on
